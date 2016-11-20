@@ -11,10 +11,12 @@ sudo docker run -itd \
                 --net=hadoop \
                 -p 50070:50070 \
                 -p 8088:8088 \
+		-v /hdfs/master:/root/hdfs \
                 --name hadoop-master \
                 --hostname hadoop-master \
                 kiwenlau/hadoop:1.0 &> /dev/null
 
+		#-v /hdfs/master:/root/hdfs \
 
 # start hadoop slave container
 i=1
@@ -24,11 +26,13 @@ do
 	echo "start hadoop-slave$i container..."
 	sudo docker run -itd \
 	                --net=hadoop \
+			-v /hdfs/slave$i:/root/hdfs \
 	                --name hadoop-slave$i \
 	                --hostname hadoop-slave$i \
 	                kiwenlau/hadoop:1.0 &> /dev/null
 	i=$(( $i + 1 ))
 done 
 
+#-v /hdfs/slave$i:/root/hdfs \
 # get into hadoop master container
 sudo docker exec -it hadoop-master bash
